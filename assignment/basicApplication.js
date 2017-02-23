@@ -39,14 +39,41 @@ var state = {
 };
 
 var clickNextButton = function() {
+ if (state.slideNumber >= 0 && state.slideNumber <=1){
+   state.slideNumber += 1;
+ }else{
+   state.slideNumber=state.slideNumber;
+ }
+console.log(state);
+};
 
-}
 
 var clickPreviousButton = function() {
+  if (state.slideNumber > 0 && state.slideNumber <=2){
+    state.slideNumber -= 1;
+  }else{
+    state.slideNumber=state.slideNumber;
+  }
+  console.log(state);
+};
 
-}
 
 var saySlideName = function(slide) {
   // saySlideName uses console.log to "say" the name of the slide it is given. It should run when
   // someone clicks on one of the buttons.
-}
+  var whichName = state.slideData[state.slideNumber].name;
+  console.log(whichName);
+};
+saySlideName();
+clickNextButton();
+saySlideName();
+clickNextButton();
+saySlideName();
+clickNextButton();
+saySlideName();
+clickPreviousButton();
+saySlideName();
+clickPreviousButton();
+saySlideName();
+clickPreviousButton();
+saySlideName();

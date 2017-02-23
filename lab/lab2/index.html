@@ -26,12 +26,23 @@
         <p>Please be sure to leave your garbage outside on <span class="day-of-week">
         Day of Week</span>. If this week is a federal holiday, leave your
         garbage outside on the following day.</p>
+        <hr>
+        <p>The Leaflet Layer ID for the clicked region:&nbsp;
+        <span id="leaflet-id"></span></p>
       </div>
+      <button id="close">Close</button>
+      <button id="reset">Center</button>
     </div>
     <!-- Map -->
     <div id="map" class="map"></div>
     <!-- Legend -->
-    <div class="legend"></div>
+    <div class="legend">
+              <div><div id="mon"></div><div id="day">Monday</div></div>
+              <div><div id="tue"></div><div id="day">Tuesday</div></div>
+              <div><div id="wed"></div><div id="day">Wednesday</div></div>
+              <div><div id="thu"></div><div id="day">Thursday</div></div>
+              <div><div id="fri"></div><div id="day">Friday</div></div>
+            </div>
     <!-- Javascript Imports -->
     <script src="js/jquery-2.2.0.js"></script>
     <script src="js/underscore.js"></script>

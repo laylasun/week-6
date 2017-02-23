@@ -26,7 +26,7 @@ You should now have GeoJSON data projected onto your map!
 
 ## Task 2
 
-Style each garbage collection area with a different color depending on what day
+Style each garbage collection area with a different fillColor depending on what day
 of the week garbage collection occurs. For example, all areas with Monday
 garbage collection could be red, all areas with Tuesday garbage collection could
 be blue, etc.
@@ -123,11 +123,18 @@ of the application to report this information.
 
 ===================== */
 
-var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
+var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson";
 var featureGroup;
-
+var days=[];
+var grouping;
 var myStyle = function(feature) {
-  return {};
+  switch(feature.properties.COLLDAY){
+    case 'MON': return {fillColor: "#FF98A7", fillOpacity: 0.6, color:"#FF98A7", opacity: 0.7, weight:1};
+    case 'TUE': return {fillColor: "#133017", fillOpacity: 0.6, color:"#133017", opcacity: 0.7, weight:1};
+    case 'WED': return {fillColor: "#30132c", fillOpacity: 0.6, color:"#30132c", opacity: 0.7, weight:1};
+    case 'THU': return {fillColor: "#d1b419", fillOpacity: 0.6, color:"#d1b419", opacity: 0.7, weight:1};
+    case 'FRI': return {fillColor: "#2a494f", fillOpacity: 0.6, color:"#2a494f", opacity: 0.7, weight:1};
+    case ' ': return {fillColor: "#190F10", fillOpacity: 0.5, color:"#190F10", opacity: 0.7, weight:1};}
 };
 
 var showResults = function() {
@@ -142,23 +149,50 @@ var showResults = function() {
   // => <div id="results">
   $('#results').show();
 };
-
+var closeResults = function(){
+  $('#intro').show();
+  $('#results').hide();
+};
 
 var eachFeatureFunction = function(layer) {
-  layer.on('click', function (event) {
+layer.on('click', function (event) {
     /* =====================
     The following code will run every time a layer on the map is clicked.
     Check out layer.feature to see some useful data about the layer that
     you can use in your application.
     ===================== */
-    console.log(layer.feature);
+    if (layer.feature.properties.COLLDAY === "MON"){
+    $('.day-of-week').text("Monday");
+  }else if (layer.feature.properties.COLLDAY ==="TUE"){
+    $('.day-of-week').text("Tuesday");
+  }else if(layer.feature.properties.COLLDAY ==="WED"){
+    $('.day-of-week').text("Wednesday");
+  }else if(layer.feature.properties.COLLDAY ==="THU"){
+    $('.day-of-week').text("Thursday");
+  }else if (layer.feature.properties.COLLDAY ==="FRI") {
+    $('.day-of-week').text("Friday");
+  }
+    var id = featureGroup.getLayerId(layer);
+    $('#leaflet-id').text(id);
+    var bounds = event.target.getBounds();
+    map.fitBounds(bounds);
+    //console.log(bounds);
     showResults();
   });
+    days.push(layer.feature.properties.COLLDAY);
 };
 
 var myFilter = function(feature) {
-  return true;
+ return feature.properties.COLLDAY !==" ";
 };
+
+$('button#close').click(function(e){
+  closeResults();
+});
+
+$('button#reset').click(function(e){
+  map.setView([40.000, -75.1090],11);
+});
 
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
@@ -170,5 +204,11 @@ $(document).ready(function() {
 
     // quite similar to _.each
     featureGroup.eachLayer(eachFeatureFunction);
+    grouping = _.countBy(days, function(day){return day;});
+    console.log(days,grouping);
+
   });
+  var statsinfo = '<p id="stats"></p>';
+  $('#intro .main').after(statsinfo);
+  $('#stats ').text('On each workday, there are 13 different regions being served.');
 });
